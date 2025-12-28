@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Mahabaleshwar Strawberry Picking</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- EmailJS CDN -->
+  <!-- ✅ EmailJS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
+  <!-- ✅ EmailJS Init -->
   <script>
-    // ✅ SAFE INIT WITH CHECK
     window.onload = function () {
       if (typeof emailjs === "undefined") {
         alert("❌ EmailJS load झाला नाही. Internet check करा.");
         return;
       }
-
-      emailjs.init("JFK1cjP-5CSxTYjcm"); 
-      // 🔴 इथे तुमचा EmailJS PUBLIC KEY टाका
+      emailjs.init("JFK1cjP-5CSxTYjcm"); // ✅ PUBLIC KEY
     };
   </script>
 
@@ -96,9 +94,9 @@
 <section>
   <h2>फार्म गॅलरी</h2>
   <div class="gallery-images">
-    <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce">
-    <img src="https://images.unsplash.com/photo-1627483297886-49710ae1fc22">
-    <img src="https://images.unsplash.com/photo-1590080876442-0f6c3a64e6c4">
+    <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce" />
+    <img src="https://images.unsplash.com/photo-1627483297886-49710ae1fc22" />
+    <img src="https://images.unsplash.com/photo-1590080876442-0f6c3a64e6c4" />
   </div>
 </section>
 
@@ -106,9 +104,9 @@
   <h2>बुकिंग / संपर्क</h2>
 
   <form id="contactForm">
-    <input type="text" name="name" placeholder="नाव" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="text" name="phone" placeholder="मोबाईल" required>
+    <input type="text" name="name" placeholder="नाव" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="text" name="phone" placeholder="मोबाईल" required />
     <textarea name="message" placeholder="Message" required></textarea>
     <button type="submit">Message पाठवा</button>
   </form>
@@ -116,44 +114,28 @@
   <p id="status"></p>
 </section>
 
+<!-- ✅ EmailJS Send Script -->
 <script>
   const form = document.getElementById("contactForm");
   const status = document.getElementById("status");
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-
     status.innerText = "⏳ Message पाठवत आहे...";
 
-    // 🔐 BASIC SAFETY CHECK
-    if (
-      "SERVICE_ID_TAKA" === "" ||
-      "TEMPLATE_ID_TAKA" === "" ||
-      "PUBLIC_KEY_TAKA" === ""
-    ) {
-      status.innerText = "❌ EmailJS keys missing आहेत";
-      return;
-    }
-
     emailjs.sendForm(
-      "service_ly4k7o4",    // 🔴 Service ID
-      "template_pxu0vgd",   // 🔴 Template ID
-      this
+      "service_ly4k7o4",     // ✅ Service ID
+      "template_pxu0vgd",    // ✅ Template ID
+      this,
+      "JFK1cjP-5CSxTYjcm"    // ✅ Public Key
     )
-    .then(function () {
+    .then(() => {
       status.innerText = "✅ Message यशस्वीपणे पाठवला!";
       form.reset();
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.error("EmailJS Error:", error);
-
-      if (error.status === 401) {
-        status.innerText = "❌ Public Key चुकीचा आहे";
-      } else if (error.status === 404) {
-        status.innerText = "❌ Service / Template ID चुकीचा आहे";
-      } else {
-        status.innerText = "❌ Network / Config error. Console पहा.";
-      }
+      status.innerText = "❌ Message पाठवता आला नाही";
     });
   });
 </script>
