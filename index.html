@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Mahabaleshwar Strawberry Picking</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- EmailJS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
   <script>
-    (function () {
-      emailjs.init("PUBLIC_KEY_HERE"); 
-      // 🔴 इथे EmailJS Public Key टाका
-    })();
+    // ✅ SAFE INIT WITH CHECK
+    window.onload = function () {
+      if (typeof emailjs === "undefined") {
+        alert("❌ EmailJS load झाला नाही. Internet check करा.");
+        return;
+      }
+
+      emailjs.init("PUBLIC_KEY_TAKA"); 
+      // 🔴 इथे तुमचा EmailJS PUBLIC KEY टाका
+    };
   </script>
 
   <style>
@@ -36,15 +43,6 @@
       padding: 90px 20px;
     }
 
-    .hero h1 {
-      font-size: 36px;
-    }
-
-    .about {
-      max-width: 800px;
-      margin: auto;
-    }
-
     .gallery-images {
       display: flex;
       justify-content: center;
@@ -62,8 +60,7 @@
       margin: auto;
     }
 
-    .contact input,
-    .contact textarea {
+    input, textarea {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -71,7 +68,7 @@
       border: 1px solid #ccc;
     }
 
-    .contact button {
+    button {
       width: 100%;
       background: #e63946;
       color: white;
@@ -82,44 +79,21 @@
       border-radius: 5px;
     }
 
-    .contact button:hover {
-      background: #d62828;
-    }
-
     #status {
       margin-top: 10px;
       font-weight: bold;
-    }
-
-    footer {
-      background: #e63946;
-      color: white;
-      padding: 15px;
-      text-align: center;
     }
   </style>
 </head>
 
 <body>
 
-<!-- HERO SECTION -->
 <section class="hero">
   <h1>🍓 महाबळेश्वर स्ट्रॉबेरी पिकिंग 🍓</h1>
   <p>ताजी, गोड आणि नैसर्गिक स्ट्रॉबेरी स्वतः तोडा</p>
 </section>
 
-<!-- ABOUT -->
-<section class="about">
-  <h2>आमच्याबद्दल</h2>
-  <p>
-    Mahabaleshwar Strawberry Farm मध्ये पर्यटकांसाठी
-    Strawberry Picking चा खास अनुभव मिळतो.
-    कुटुंब, मित्र आणि मुलांसाठी उत्तम ठिकाण.
-  </p>
-</section>
-
-<!-- GALLERY -->
-<section class="gallery">
+<section>
   <h2>फार्म गॅलरी</h2>
   <div class="gallery-images">
     <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce">
@@ -128,14 +102,13 @@
   </div>
 </section>
 
-<!-- CONTACT -->
 <section class="contact">
   <h2>बुकिंग / संपर्क</h2>
 
   <form id="contactForm">
-    <input type="text" name="name" placeholder="तुमचं नाव" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="text" name="phone" placeholder="मोबाईल नंबर" required />
+    <input type="text" name="name" placeholder="नाव" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="मोबाईल" required>
     <textarea name="message" placeholder="Message" required></textarea>
     <button type="submit">Message पाठवा</button>
   </form>
@@ -143,29 +116,45 @@
   <p id="status"></p>
 </section>
 
-<footer>
-  © 2025 Mahabaleshwar Strawberry Farm 🍓
-</footer>
-
 <script>
-  document.getElementById("contactForm").addEventListener("submit", function (e) {
+  const form = document.getElementById("contactForm");
+  const status = document.getElementById("status");
+
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    status.innerText = "⏳ Message पाठवत आहे...";
+
+    // 🔐 BASIC SAFETY CHECK
+    if (
+      "SERVICE_ID_TAKA" === "" ||
+      "TEMPLATE_ID_TAKA" === "" ||
+      "PUBLIC_KEY_TAKA" === ""
+    ) {
+      status.innerText = "❌ EmailJS keys missing आहेत";
+      return;
+    }
+
     emailjs.sendForm(
-      "SERVICE_ID_HERE",     // 🔴 EmailJS Service ID
-      "TEMPLATE_ID_HERE",    // 🔴 EmailJS Template ID
+      "SERVICE_ID_TAKA",    // 🔴 Service ID
+      "TEMPLATE_ID_TAKA",   // 🔴 Template ID
       this
-    ).then(
-      function () {
-        document.getElementById("status").innerText =
-          "✅ Message यशस्वीपणे पाठवला!";
-      },
-      function (error) {
-        console.log(error);
-        document.getElementById("status").innerText =
-          "❌ Error आला, पुन्हा try करा";
+    )
+    .then(function () {
+      status.innerText = "✅ Message यशस्वीपणे पाठवला!";
+      form.reset();
+    })
+    .catch(function (error) {
+      console.error("EmailJS Error:", error);
+
+      if (error.status === 401) {
+        status.innerText = "❌ Public Key चुकीचा आहे";
+      } else if (error.status === 404) {
+        status.innerText = "❌ Service / Template ID चुकीचा आहे";
+      } else {
+        status.innerText = "❌ Network / Config error. Console पहा.";
       }
-    );
+    });
   });
 </script>
 
