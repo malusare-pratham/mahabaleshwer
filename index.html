@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Mahabaleshwar Strawberry Picking</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- EmailJS -->
+  <!-- EmailJS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    (function(){
-      emailjs.init("YOUR_PUBLIC_KEY"); // 🔴 इथे Public Key टाक
+    (function () {
+      emailjs.init("PUBLIC_KEY_HERE"); 
+      // 🔴 इथे EmailJS Public Key टाका
     })();
   </script>
 
@@ -26,27 +27,24 @@
       text-align: center;
     }
 
-    /* HERO */
     .hero {
       background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("https://images.unsplash.com/photo-1582284540020-8acbe03f4924");
       background-size: cover;
       background-position: center;
       color: white;
-      padding: 80px 20px;
+      padding: 90px 20px;
     }
 
     .hero h1 {
       font-size: 36px;
     }
 
-    /* ABOUT */
     .about {
       max-width: 800px;
       margin: auto;
     }
 
-    /* GALLERY */
     .gallery-images {
       display: flex;
       justify-content: center;
@@ -59,7 +57,6 @@
       border-radius: 10px;
     }
 
-    /* CONTACT */
     .contact form {
       max-width: 400px;
       margin: auto;
@@ -105,7 +102,7 @@
 
 <body>
 
-<!-- HERO -->
+<!-- HERO SECTION -->
 <section class="hero">
   <h1>🍓 महाबळेश्वर स्ट्रॉबेरी पिकिंग 🍓</h1>
   <p>ताजी, गोड आणि नैसर्गिक स्ट्रॉबेरी स्वतः तोडा</p>
@@ -115,8 +112,8 @@
 <section class="about">
   <h2>आमच्याबद्दल</h2>
   <p>
-    आमच्या Mahabaleshwar Strawberry Farm मध्ये
-    पर्यटकांसाठी Strawberry Picking चा खास अनुभव मिळतो.
+    Mahabaleshwar Strawberry Farm मध्ये पर्यटकांसाठी
+    Strawberry Picking चा खास अनुभव मिळतो.
     कुटुंब, मित्र आणि मुलांसाठी उत्तम ठिकाण.
   </p>
 </section>
@@ -136,9 +133,9 @@
   <h2>बुकिंग / संपर्क</h2>
 
   <form id="contactForm">
-    <input type="text" name="name" placeholder="तुमचं नाव" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="text" name="phone" placeholder="मोबाईल नंबर" required>
+    <input type="text" name="name" placeholder="तुमचं नाव" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="text" name="phone" placeholder="मोबाईल नंबर" required />
     <textarea name="message" placeholder="Message" required></textarea>
     <button type="submit">Message पाठवा</button>
   </form>
@@ -151,19 +148,20 @@
 </footer>
 
 <script>
-  document.getElementById("contactForm").addEventListener("submit", function(e){
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
     emailjs.sendForm(
-      "YOUR_SERVICE_ID",   // 🔴 Service ID
-      "YOUR_TEMPLATE_ID",  // 🔴 Template ID
+      "SERVICE_ID_HERE",     // 🔴 EmailJS Service ID
+      "TEMPLATE_ID_HERE",    // 🔴 EmailJS Template ID
       this
     ).then(
-      function(){
-        document.getElementById("status").innerText = 
+      function () {
+        document.getElementById("status").innerText =
           "✅ Message यशस्वीपणे पाठवला!";
       },
-      function(){
+      function (error) {
+        console.log(error);
         document.getElementById("status").innerText =
           "❌ Error आला, पुन्हा try करा";
       }
